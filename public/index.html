@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Quiz Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .tab:hover {
+            background: #e9ecef;
+        }
+
+        .tab.active {
+            background: #007bff;
+            color: white;
+        }
+
+        .tab-content {
+            padding: 30px;
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+
+        textarea.form-control {
+            min-height: 200px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,123,255,0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40,167,69,0.3);
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .question-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .question-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .question-number {
+            background: #007bff;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .question-number.correct {
+            background: #28a745;
+        }
+
+        .question-number.incorrect {
+            background: #dc3545;
+        }
+
+        .question-type {
+            background: #6c757d;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .question-text {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .options {
+            list-style: none;
+            margin: 15px 0;
+        }
+
+        .option {
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            border-color: #007bff;
+            background: #f8f9ff;
+        }
+
+        .option.selected {
+            border-color: #007bff;
+            background: #e7f1ff;
+        }
+
+        .option.correct {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .option.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .explanation {
+            background: #e7f1ff;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .explanation-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #007bff;
+        }
+
+        .score-display {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .sample-content {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            line-height: 1.8;
+        }
+
+        .answer-review {
+            margin: 15px 0;
+        }
+
+        .answer-box {
+            padding: 10px;
+            border-radius: 6px;
+            margin: 5px 0;
+        }
+
+        .user-answer {
+            background: #f8f9fa;
+        }
+
+        .correct-answer {
+            background: #e7f1ff;
+        }
+
+        .status-indicator {
+            margin-left: auto;
+            font-weight: bold;
+        }
+
+        .status-correct {
+            color: #28a745;
+        }
+
+        .status-incorrect {
+            color: #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+
+            .btn {
+                display: block;
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 AI Quiz Generator</h1>
+            <p>Generate custom quizzes from any educational content</p>
+            <span class="badge" id="statusBadge">🔄 Checking server...</span>
+        </div>
+
+        <div id="errorAlert" class="alert alert-danger" style="display:none"></div>
+        <div id="successAlert" class="alert alert-success" style="display:none"></div>
+
+        <div class="main-content">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('generator')">Quiz Generator</button>
+                <button class="tab" onclick="switchTab('quiz')">Take Quiz</button>
+                <button class="tab" onclick="switchTab('results')">Results</button>
+            </div>
+
+            <div class="tab-content">
+                <!-- Generator Tab -->
+                <div id="generator" class="tab-pane active">
+                    <h2>Create Your Custom Quiz</h2>
+                    
+                    <div class="alert alert-info">
+                        <strong>✨ How it works:</strong> Paste ANY educational content below, configure your preferences, and our AI will generate custom quiz questions instantly!
+                    </div>
+
+                    <form id="quizForm">
+                        <div class="form-group">
+                            <label for="content">Educational Content *</label>
+                            <textarea id="content" class="form-control" placeholder="Paste your educational content here... (minimum 100 characters)
+
+Try any topic:
+• History lessons
+• Science concepts  
+• Literature analysis
+• Math problems
+• Any subject matter!
+
+The AI will analyze your content and create relevant questions." required></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="numQuestions">Number of Questions</label>
+                                <select id="numQuestions" class="form-control">
+                                    <option value="3">3 Questions</option>
+                                    <option value="5" selected>5 Questions</option>
+                                    <option value="8">8 Questions</option>
+                                    <option value="10">10 Questions</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="difficulty">Difficulty Level</label>
+                                <select id="difficulty" class="form-control">
+                                    <option value="beginner">Beginner</option>
+                                    <option value="intermediate" selected>Intermediate</option>
+                                    <option value="advanced">Advanced</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="subject">Subject Area</label>
+                                <select id="subject" class="form-control">
+                                    <option value="history">History</option>
+                                    <option value="science">Science</option>
+                                    <option value="mathematics">Mathematics</option>
+                                    <option value="literature">Literature</option>
+                                    <option value="other" selected>Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="gradeLevel">Grade Level</label>
+                                <select id="gradeLevel" class="form-control">
+                                    <option value="elementary">Elementary</option>
+                                    <option value="middle" selected>Middle School</option>
+                                    <option value="high">High School</option>
+                                    <option value="college">College</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary" id="generateBtn" onclick="handleGenerateQuiz()">
+                            🚀 Generate Quiz with AI
+                        </button>
+                        <button type="button" class="btn btn-success" onclick="loadSampleContent()">
+                            📝 Load Sample Content
+                        </button>
+                    </form>
+
+                    <div id="sampleContent" class="sample-content" style="display: none;">
+                        <h3>Sample: The Solar System</h3>
+                        <p>The Solar System consists of the Sun and all objects that orbit it, including eight planets, their moons, dwarf planets, asteroids, and comets. The four inner planets (Mercury, Venus, Earth, and Mars) are called terrestrial planets because they have solid, rocky surfaces. The four outer planets (Jupiter, Saturn, Uranus, and Neptune) are gas giants, much larger and composed primarily of hydrogen and helium.</p>
+                        
+                        <p>The Sun contains 99.86% of the Solar System's mass and provides the energy that sustains life on Earth through nuclear fusion. Earth is the only planet known to harbor life, with liquid water covering about 71% of its surface. Mars, often called the Red Planet due to iron oxide on its surface, has been a focus of exploration for signs of past or present life.</p>
+                        
+                        <p>Jupiter is the largest planet, with a mass more than twice that of all other planets combined. Saturn is famous for its spectacular ring system made of ice and rock particles. The Solar System formed about 4.6 billion years ago from a giant rotating cloud of gas and dust called the solar nebula.</p>
+                    </div>
+                </div>
+
+                <!-- Quiz Tab -->
+                <div id="quiz" class="tab-pane">
+                    <div id="quizContainer" class="quiz-container">
+                        <p style="text-align: center; padding: 40px; color: #6c757d;">
+                            📚 Generate a quiz to get started!
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Results Tab -->
+                <div id="results" class="tab-pane">
+                    <div id="resultsContainer">
+                        <p style="text-align: center; padding: 40px; color: #6c757d;">
+                            ✅ Complete a quiz to see your results here!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentQuiz = null;
+        let userAnswers = [];
+        const API_URL = window.location.origin;
+
+        // Check server status on load
+        async function checkServerStatus() {
+            try {
+                const response = await fetch(`${API_URL}/api/health`);
+                const data = await response.json();
+                
+                const badge = document.getElementById('statusBadge');
+                if (data.apiKeyConfigured) {
+                    badge.textContent = '✅ Server Ready';
+                    badge.style.background = 'rgba(40, 167, 69, 0.8)';
+                } else {
+                    badge.textContent = '⚠️ Server Running (No API Key)';
+                    badge.style.background = 'rgba(255, 193, 7, 0.8)';
+                    showError('Server is running but OpenAI API key is not configured. Check server logs.');
+                }
+            } catch (error) {
+                const badge = document.getElementById('statusBadge');
+                badge.textContent = '❌ Server Offline';
+                badge.style.background = 'rgba(220, 53, 69, 0.8)';
+                showError('Cannot connect to server. Make sure the backend is running on port 3000.');
+            }
+        }
+
+        checkServerStatus();
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            
+            const tabs = document.querySelectorAll('.tab');
+            if (tabName === 'generator') tabs[0].classList.add('active');
+            if (tabName === 'quiz') tabs[1].classList.add('active');
+            if (tabName === 'results') tabs[2].classList.add('active');
+            
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        function loadSampleContent() {
+            const sampleDiv = document.getElementById('sampleContent');
+            const textarea = document.getElementById('content');
+            
+            if (sampleDiv.style.display === 'none') {
+                sampleDiv.style.display = 'block';
+                const paras = sampleDiv.querySelectorAll('p');
+                let text = '';
+                paras.forEach(p => text += p.textContent + '\n\n');
+                textarea.value = text.trim();
+            } else {
+                sampleDiv.style.display = 'none';
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorAlert');
+            errorDiv.textContent = '❌ ' + message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => errorDiv.style.display = 'none', 8000);
+            window.scrollTo(0, 0);
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successAlert');
+            successDiv.textContent = '✅ ' + message;
+            successDiv.style.display = 'block';
+            setTimeout(() => successDiv.style.display = 'none', 4000);
+            window.scrollTo(0, 0);
+        }
+
+        async function handleGenerateQuiz() {
+            const content = document.getElementById('content').value.trim();
+            
+            if (!content) {
+                showError('Please enter some educational content first!');
+                return;
+            }
+
+            if (content.length < 100) {
+                showError('Content must be at least 100 characters long!');
+                return;
+            }
+
+            const options = {
+                numQuestions: parseInt(document.getElementById('numQuestions').value),
+                difficulty: document.getElementById('difficulty').value,
+                subject: document.getElementById('subject').value,
+                gradeLevel: document.getElementById('gradeLevel').value
+            };
+
+            const btn = document.getElementById('generateBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ Generating...';
+            
+            showLoading();
+
+            try {
+                const response = await fetch(`${API_URL}/api/generate-quiz`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ content, options })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    throw new Error(data.error || 'Failed to generate quiz');
+                }
+
+                currentQuiz = data.quiz;
+                userAnswers = new Array(currentQuiz.length).fill(null);
+                
+                showSuccess(`Generated ${currentQuiz.length} questions successfully!`);
+                displayQuiz();
+
+            } catch (error) {
+                console.error('Quiz generation error:', error);
+                showError(error.message || 'Failed to generate quiz. Check server logs.');
+                document.getElementById('quizContainer').innerHTML = `
+                    <p style="text-align: center; padding: 40px; color: #dc3545;">
+                        ❌ ${error.message}
+                        <br><br>
+                        <small>Make sure the backend server is running with: npm start</small>
+                    </p>
+                `;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🚀 Generate Quiz with AI';
+            }
+        }
+
+        function showLoading() {
+            document.getElementById('quizContainer').innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <h3>🤖 AI is Analyzing Your Content...</h3>
+                    <p>Creating custom questions from your material...</p>
+                    <p style="font-size: 0.9rem; color: #6c757d; margin-top: 10px;">This takes 15-30 seconds</p>
+                </div>
+            `;
+            switchTab('quiz');
+        }
+
+        function displayQuiz() {
+            let html = `
+                <div style="margin-bottom:30px">
+                    <h2>📝 Your Custom Quiz</h2>
+                    <p>Answer all questions and submit to see your results!</p>
+                </div>
+            `;
+            
+            currentQuiz.forEach((q, i) => {
+                html += `<div class="question-card" id="q${i}">
+                    <div class="question-header">
+                        <span class="question-number">Question ${i+1}</span>
+                        <span class="question-type">${q.type.replace('-', ' ').toUpperCase()}</span>
+                    </div>
+                    <div class="question-text">${q.question}</div>`;
+
+                if (q.type === 'multiple-choice') {
+                    html += '<ul class="options">';
+                    q.options.forEach((opt, j) => {
+                        html += `<li class="option" onclick="selectMC(${i},${j})"><strong>${String.fromCharCode(65+j)})</strong> ${opt}</li>`;
+                    });
+                    html += '</ul>';
+                } else if (q.type === 'true-false') {
+                    html += `<ul class="options">
+                        <li class="option" onclick="selectTF(${i},true)"><strong>True</strong></li>
+                        <li class="option" onclick="selectTF(${i},false)"><strong>False</strong></li>
+                    </ul>`;
+                } else if (q.type === 'short-answer') {
+                    html += `<textarea class="answer-input" id="ans${i}" placeholder="Type your answer here (2-3 sentences)..." onchange="userAnswers[${i}]=this.value"></textarea>`;
+                } else if (q.type === 'fill-blank') {
+                    html += `<input type="text" class="answer-input" id="ans${i}" placeholder="Enter your answer..." onchange="userAnswers[${i}]=this.value">`;
+                }
+                
+                html += '</div>';
+            });
+
+            html += `
+                <div style="text-align:center;margin-top:30px">
+                    <button class="btn btn-primary" onclick="submitQuiz()" style="font-size:18px;padding:15px 30px">
+                        ✓ Submit Quiz
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('quizContainer').innerHTML = html;
+        }
+
+        function selectMC(qIdx, optIdx) {
+            const card = document.getElementById(`q${qIdx}`);
+            card.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+            card.querySelectorAll('.option')[optIdx].classList.add('selected');
+            userAnswers[qIdx] = optIdx;
+        }
+
+        function selectTF(qIdx, val) {
+            const card = document.getElementById(`q${qIdx}`);
+            card.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+            card.querySelectorAll('.option')[val ? 0 : 1].classList.add('selected');
+            userAnswers[qIdx] = val;
+        }
+
+        function submitQuiz() {
+            if (userAnswers.some(a => a === null || a === '')) {
+                alert('Please answer all questions before submitting!');
+                return;
+            }
+            showResults();
+        }
+
+        function showResults() {
+            let correct = 0;
+            let html = '';
+
+            currentQuiz.forEach((q, i) => {
+                const userAns = userAnswers[i];
+                let isCorrect = false;
+
+                if (q.type === 'multiple-choice') {
+                    isCorrect = userAns === q.correct;
+                } else if (q.type === 'true-false') {
+                    isCorrect = userAns === q.correct;
+                } else if (q.type === 'short-answer') {
+                    const userLower = String(userAns).toLowerCase();
+                    isCorrect = q.keyPoints && q.keyPoints.some(kp => userLower.includes(kp.toLowerCase()));
+                } else if (q.type === 'fill-blank') {
+                    const correctLower = String(q.answer).toLowerCase().trim();
+                    const userLower = String(userAns).toLowerCase().trim();
+                    isCorrect = userLower === correctLower || userLower.includes(correctLower) || correctLower.includes(userLower);
+                }
+
+                if (isCorrect) correct++;
+
+                html += `<div class="question-card">
+                    <div class="question-header">
+                        <span class="question-number ${isCorrect?'correct':'incorrect'}">Question ${i+1}</span>
+                        <span class="question-type">${q.type.replace('-', ' ').toUpperCase()}</span>
+                        <span class="status-indicator ${isCorrect?'status-correct':'status-incorrect'}">
+                            ${isCorrect?'✓ Correct':'✗ Incorrect'}
+                        </span>
+                    </div>
+                    <div class="question-text">${q.question}</div>`;
+
+                if (q.type === 'multiple-choice') {
+                    html += '<ul class="options">';
+                    q.options.forEach((opt, j) => {
+                        let cls = '';
+                        let mark = '';
+                        if (j === q.correct) {
+                            cls = 'correct';
+                            mark = ' ✓';
+                        } else if (j === userAns && !isCorrect) {
+                            cls = 'incorrect';
+                            mark = ' (Your answer)';
+                        }
+                        html += `<li class="option ${cls}"><strong>${String.fromCharCode(65+j)})</strong> ${opt}${mark}</li>`;
+                    });
+                    html += '</ul>';
+                } else if (q.type === 'true-false') {
+                    html += `<ul class="options">
+                        <li class="option ${q.correct===true?'correct':(userAns===true&&!isCorrect?'incorrect':'')}">
+                            <strong>True</strong> ${q.correct===true?' ✓':''}${userAns===true&&!isCorrect?' (Your answer)':''}
+                        </li>
+                        <li class="option ${q.correct===false?'correct':(userAns===false&&!isCorrect?'incorrect':'')}">
+                            <strong>False</strong> ${q.correct===false?' ✓':''}${userAns===false&&!isCorrect?' (Your answer)':''}
+                        </li>
+                    </ul>`;
+                } else if (q.type === 'short-answer') {
+                    html += `<div class="answer-review">
+                        <strong>Your Answer:</strong>
+                        <div class="answer-box user-answer">${userAns}</div>
+                        <strong>Sample Answer:</strong>
+                        <div class="answer-box correct-answer">${q.sampleAnswer || 'See explanation below'}</div>
+                    </div>`;
+                } else if (q.type === 'fill-blank') {
+                    html += `<div class="answer-review">
+                        <strong>Your Answer:</strong> <span style="color:${isCorrect?'#28a745':'#dc3545'};font-weight:600">${userAns}</span><br><br>
+                        <strong>Correct Answer:</strong> <span style="color:#28a745;font-weight:600">${q.answer}</span>
+                    </div>`;
+                }
+
+                html += `<div class="explanation">
+                    <div class="explanation-title">💡 Explanation:</div>
+                    <div>${q.explanation}</div>
+                </div></div>`;
+            });
+
+            const pct = Math.round((correct/currentQuiz.length)*100);
+            const scoreHTML = `<div class="score-display">
+                <h3>🎉 Quiz Complete!</h3>
+                <p style="font-size:1.3rem;margin:10px 0">Score: <strong>${correct} / ${currentQuiz.length}</strong> (${pct}%)</p>
+                <p style="font-size:1.1rem">${pct>=90?'🌟 Outstanding!':pct>=80?'🎯 Excellent!':pct>=70?'👍 Good job!':pct>=60?'📚 Keep practicing!':'💪 Review and try again!'}</p>
+            </div>`;
+
+            document.getElementById('resultsContainer').innerHTML = scoreHTML + html + `
+                <div style="text-align:center;margin-top:30px">
+                    <button class="btn btn-primary" onclick="retakeQuiz()">🔄 Retake Quiz</button>
+                    <button class="btn btn-success" onclick="switchTab('generator')">➕ Generate New Quiz</button>
+                </div>
+            `;
+            
+            switchTab('results');
+        }
+
+        function retakeQuiz() {
+            userAnswers = new Array(currentQuiz.length).fill(null);
+            displayQuiz();
+            switchTab('quiz');
+        }
+
+        console.log('✅ Quiz Generator Frontend Ready!');
+        console.log('Server URL:', API_URL);
+    </script>
+</body>
+</html>
