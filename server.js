@@ -30,7 +30,7 @@ Content: {content}
 
 Requirements:
 - Generate exactly {numQuestions} questions
-- Mix question types: multiple choice, true/false, short answer, fill-in-the-blank
+- Mix question types: multiple choice, true/false, short answer
 - Difficulty level: {difficulty}
 - Grade level: {gradeLevel}
 - Subject: {subject}
@@ -44,7 +44,10 @@ Return JSON format:
       "question": "Question text here?",
       "options": ["Option A", "Option B", "Option C", "Option D"],
       "correct": 2,
-      "explanation": "Explanation of correct answer"
+      "correct": 2,
+      "explanation": "Explanation of correct answer",
+      "keywords": ["keyword1", "keyword2"]
+    }
     }
   ]
 }
@@ -85,19 +88,9 @@ Focus on:
 - Comparisons and explanations
 - {gradeLevel} level complexity
 
-Return as JSON array.`,
+- {gradeLevel} level complexity
 
-  fillBlank: `Create {count} fill-in-the-blank questions:
-
-{content}
-
-Requirements:
-- Test specific facts, dates, names
-- Provide sufficient context
-- Single correct answer per blank
-- {gradeLevel} appropriate vocabulary
-
-Return as JSON array.`
+Return as JSON array. Each object must include a "keywords" array of 3-5 essential terms for grading.`
 };
 
 // AI Service Integration (Replace with your preferred AI service)
@@ -110,17 +103,17 @@ class AIService {
   async generateQuiz(content, options) {
     try {
       const prompt = this.buildPrompt(content, options);
-      
+
       // Example using OpenAI API
       if (this.apiKey.startsWith('sk-')) {
         return await this.callOpenAI(prompt);
       }
-      
+
       // Example using Anthropic Claude
       if (this.apiKey.startsWith('sk-ant-')) {
         return await this.callAnthropic(prompt);
       }
-      
+
       throw new Error('No valid AI API key configured');
     } catch (error) {
       console.error('AI Service Error:', error);
@@ -198,7 +191,7 @@ class AIService {
       if (jsonMatch) {
         return JSON.parse(jsonMatch[0]);
       }
-      
+
       // Fallback: try to parse the entire response
       return JSON.parse(content);
     } catch (error) {
@@ -245,13 +238,13 @@ class QuizEnhancer {
     return questions.map(question => {
       // Add unique IDs
       question.id = this.generateId();
-      
+
       // Ensure proper formatting
       question = this.formatQuestion(question);
-      
+
       // Add learning objectives
       question.learningObjective = this.generateLearningObjective(question);
-      
+
       return question;
     });
   }
@@ -290,7 +283,7 @@ class QuizEnhancer {
 app.post('/api/generate-quiz', async (req, res) => {
   try {
     const { content, options } = req.body;
-    
+
     // Validate input
     const validationErrors = ContentValidator.validate(content, options);
     if (validationErrors.length > 0) {
@@ -303,10 +296,10 @@ app.post('/api/generate-quiz', async (req, res) => {
     // Generate quiz using AI
     const aiService = new AIService();
     const result = await aiService.generateQuiz(content, options);
-    
+
     // Enhance questions
     const enhancedQuestions = QuizEnhancer.enhanceQuestions(result.questions);
-    
+
     res.json({
       success: true,
       quiz: {
@@ -332,10 +325,10 @@ app.post('/api/generate-quiz', async (req, res) => {
 app.post('/api/submit-quiz', (req, res) => {
   try {
     const { quizId, answers, timeSpent } = req.body;
-    
+
     // In a real app, you'd save results to a database
     console.log('Quiz submitted:', { quizId, answers, timeSpent });
-    
+
     res.json({
       success: true,
       message: 'Quiz results saved successfully'
