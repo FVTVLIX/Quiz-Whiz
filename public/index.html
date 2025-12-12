@@ -547,7 +547,7 @@
                         <div style="margin-top: 32px; display: flex; gap: 12px; flex-wrap: wrap;">
                             <button type="button" class="btn btn-primary" id="generateBtn"
                                 onclick="handleGenerateQuiz()">
-                                <span>✨</span> Generate Quiz
+                                Generate Quiz
                             </button>
                             <button type="button" class="btn btn-success" onclick="loadSampleContent()">
                                 Load Sample
@@ -579,7 +579,6 @@
                 <div id="quiz" class="tab-pane">
                     <div id="quizContainer" class="quiz-container">
                         <div style="text-align: center; padding: 60px 20px; color: var(--text-muted);">
-                            <p style="font-size: 3rem; margin-bottom: 16px;">📚</p>
                             <p>Generate a quiz to get started.</p>
                         </div>
                     </div>
@@ -589,7 +588,6 @@
                 <div id="results" class="tab-pane">
                     <div id="resultsContainer">
                         <div style="text-align: center; padding: 60px 20px; color: var(--text-muted);">
-                            <p style="font-size: 3rem; margin-bottom: 16px;">🏆</p>
                             <p>Complete a quiz to see your results.</p>
                         </div>
                     </div>
@@ -614,14 +612,14 @@
                 if (data.status === 'healthy') {
                     // We don't verify API key in health check response based on server.js code, 
                     // but we can assume it works if headers are fine. 
-                    badge.textContent = '● System Online';
+                    badge.textContent = 'System Online';
                     badge.style.color = 'var(--success)';
                     badge.style.background = '#f0fdf4';
                     badge.style.borderColor = '#bbf7d0';
                 }
             } catch (error) {
                 const badge = document.getElementById('statusBadge');
-                badge.textContent = '● System Offline';
+                badge.textContent = 'System Offline';
                 badge.style.color = 'var(--danger)';
                 badge.style.background = '#fef2f2';
                 badge.style.borderColor = '#fecaca';
@@ -736,7 +734,7 @@
                 `;
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = '<span>✨</span> Generate Quiz';
+                btn.innerHTML = 'Generate Quiz';
             }
         }
 
@@ -911,7 +909,7 @@
 
                 if (q.explanation) {
                     html += `<div class="explanation">
-                        <div class="explanation-title">📝 Explanation</div>
+                        <div class="explanation-title">Explanation</div>
                         <div>${q.explanation}</div>
                     </div>`;
                 }

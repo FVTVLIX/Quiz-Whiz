@@ -1,280 +1,96 @@
-# 🎓 AI-Powered Educational Quiz Generator
+# Quiz-Whiz: AI-Powered Educational Assistant
 
-Transform any educational content into engaging, custom-generated quizzes using AI technology. Perfect for teachers, students, and content creators.
+**Transform any text into a comprehensive quiz in seconds.** 
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Node](https://img.shields.io/badge/node-%3E%3D14.0.0-brightgreen.svg)
-![AI](https://img.shields.io/badge/AI-OpenAI%20%7C%20Anthropic-orange.svg)
+Quiz-Whiz leverages advanced AI to instantly generate high-quality educational assessments. Whether you're a teacher preparing for class, a student studying for exams, or a professional creating training materials, Quiz-Whiz does the heavy lifting for you.
 
-## ✨ Features
+---
 
-- 🤖 **AI-Powered Generation** - Uses OpenAI GPT or Anthropic Claude to create intelligent questions
-- 📝 **Multiple Question Types** - Generates MC, True/False, Short Answer, and Fill-in-the-Blank questions
-- 🎯 **Custom Difficulty Levels** - Beginner, Intermediate, Advanced, or Mixed
-- 📚 **Any Subject** - Works with history, science, literature, math, or any educational content
-- 🎨 **Beautiful UI** - Clean, responsive design that works on all devices
-- ⚡ **Instant Feedback** - Automatic grading with detailed explanations
-- 🔄 **Fallback Mode** - Works without API keys using rule-based generation
-- 🌐 **Easy Deployment** - Deploy to any hosting platform in minutes
+## Why Use Quiz-Whiz? (The Impact)
 
-## 🚀 Quick Start
+Creating diverse, accurate, and engaging quizzes manually is time-consuming and often repetitive. Quiz-Whiz changes the game.
+
+| **Without Quiz-Whiz** | **With Quiz-Whiz** |
+| :--- | :--- |
+| **Hours of Work**: Manually drafting questions, distractors, and answers takes forever. | **Seconds to Generate**: Paste your content, click one button, and get a full quiz instantly. |
+| **Cognitive Load**: Struggle to come up with creative wrong answers (distractors). | **AI Creativity**: Automatically generates plausible distractors and varied question formats. |
+| **Limited Variety**: Easy to get stuck writing the same type of questions. | **diverse Formats**: Instantly varies between Multiple Choice, True/False, and Short Answer. |
+| **Static Grading**: Grading takes time and feedback is often delayed. | **Instant Feedback**: Auto-grading with intelligent fuzzy matching for text answers. |
+| **One Size Fits All**: Difficult to adjust content for different learning levels. | **Customizable**: Instantly adjust difficulty (Beginner to Advanced) and Grade Level. |
+
+---
+
+## Key Features
+
+*   **Advanced AI Generation**: Powered by OpenAI/Anthropic to understand context and nuance in your text.
+*   **Intelligent Grading**: 
+    *   **Keyword Matching**: Short answers are graded based on key concepts, not exact matches.
+    *   **Instant Explanations**: Immediate feedback explains *why* an answer is correct or incorrect.
+*   **Flexible Formats**:
+    *   **Multiple Choice**: Standard testing format with smart distractors.
+    *   **True/False**: Rapid-fire fact checking.
+    *   **Short Answer**: Key-concept validation for deeper understanding.
+*   **Modern Minimalist Design**: A clean, distraction-free interface built for focus (no clutter, no purple gradients).
+*   **Deep Customization**: Control the subject, difficulty, grade level, and question count to fit your exact needs.
+
+---
+
+## How It Works
+
+1.  **Input Content**: Paste notes, articles, or documentation into the text area.
+2.  **Customize**: Select your target audience (e.g., "High School", "History") and difficulty.
+3.  **Generate**: Watch as the AI constructs a tailored quiz in roughly 10-15 seconds.
+4.  **Test & Learn**: Take the quiz and get instant, detailed feedback on your performance.
+
+---
+
+## Quick Start Guide
 
 ### Prerequisites
-
-- Node.js 14+ installed
-- An OpenAI or Anthropic API key (optional but recommended)
+*   Node.js (v14+)
+*   An API Key (OpenAI or Anthropic)
 
 ### Installation
 
 ```bash
-# Clone or create project folder
-mkdir ai-quiz-generator
-cd ai-quiz-generator
+# 1. Clone the repository
+git clone https://github.com/yourusername/quiz-whiz.git
+cd quiz-whiz
 
-# Install dependencies
+# 2. Install dependencies
 npm install
 
-# Configure environment
-cp .env.example .env
-# Edit .env and add your API key
+# 3. Configure API Key
+# Create a .env file and add your key:
+echo "OPENAI_API_KEY=your_key_here" > .env
 
-# Start the server
+# 4. Start the Application
 npm start
 ```
 
-Visit **http://localhost:3000** and start generating quizzes!
+Visit **`http://localhost:3000`** in your browser to start.
 
-## 📖 How It Works
+---
 
-1. **Paste Content** - Copy any educational material into the text area
-2. **Configure** - Select number of questions, difficulty, and grade level
-3. **Generate** - AI analyzes your content and creates custom questions (15-30 seconds)
-4. **Take Quiz** - Answer the generated questions
-5. **Get Results** - Instant grading with explanations for each answer
+## Tech Stack
 
-## 🎯 Example Use Cases
+*   **Frontend**: HTML5, Vanilla JavaScript, CSS3 (Inter font, modern variables)
+*   **Backend**: Node.js, Express
+*   **AI Integration**: OpenAI API / Anthropic Claude API
+*   **Tools**: Rate Limiting, Helmet (Security), CORS
 
-### For Teachers
-- Create quizzes from lesson plans
-- Generate tests from textbook chapters
-- Build study guides for students
-- Save time on assessment creation
+---
 
-### For Students
-- Test understanding of course materials
-- Practice with custom questions
-- Study for exams effectively
-- Learn from detailed explanations
+## Contributing
 
-### For Content Creators
-- Add assessments to educational content
-- Engage learners with interactive quizzes
-- Validate learning outcomes
-- Create valuable course materials
+We welcome contributions! Please feel free to verify the logic, improve the prompt engineering, or enhance the UI.
 
-## 💡 Usage Examples
+1.  Fork the Project
+2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4.  Push to the Branch (`git push origin feature/AmazingFeature`)
+5.  Open a Pull Request
 
-### Example 1: History Quiz
-```
-Input: "The American Revolution (1775-1783) was a colonial revolt..."
-Output: 8 custom questions about dates, events, key figures, and causes
-```
+---
 
-### Example 2: Science Quiz
-```
-Input: "Photosynthesis is the process by which plants convert light..."
-Output: Questions about chemical equations, processes, and applications
-```
-
-### Example 3: Literature Quiz
-```
-Input: "Shakespeare's Hamlet explores themes of revenge and madness..."
-Output: Questions about plot, themes, characters, and symbolism
-```
-
-## 🛠️ Technology Stack
-
-**Frontend:**
-- HTML5
-- CSS3 (Custom styling)
-- Vanilla JavaScript
-- Responsive design
-
-**Backend:**
-- Node.js
-- Express.js
-- OpenAI API / Anthropic API
-- RESTful architecture
-
-## 📁 Project Structure
-
-```
-ai-quiz-generator/
-├── public/
-│   └── index.html          # Frontend application
-├── server.js               # Backend API with AI integration
-├── package.json            # Dependencies and scripts
-├── .env                    # Environment variables (API keys)
-├── .env.example            # Template for .env
-├── README.md               # This file
-├── QUICKSTART.md           # 5-minute setup guide
-└── COMPLETE-SETUP-GUIDE.md # Detailed documentation
-```
-
-## ⚙️ Configuration
-
-### Environment Variables
-
-```bash
-# AI Provider (openai or anthropic)
-AI_PROVIDER=openai
-
-# OpenAI Configuration
-OPENAI_API_KEY=sk-your-key-here
-
-# OR Anthropic Configuration
-ANTHROPIC_API_KEY=sk-ant-your-key-here
-
-# Server Port
-PORT=3000
-```
-
-### Customization Options
-
-- **Number of Questions:** 1-20
-- **Difficulty Levels:** Beginner, Intermediate, Advanced, Mixed
-- **Grade Levels:** Elementary, Middle School, High School, College, Professional
-- **Subjects:** History, Science, Math, Literature, and more
-
-## 🔐 Security
-
-- API keys stored in `.env` (not committed to Git)
-- CORS enabled for security
-- Input validation on all endpoints
-- Rate limiting to prevent abuse
-- Secure API key handling
-
-## 💰 Cost Estimates
-
-**With OpenAI:**
-- GPT-3.5-Turbo: ~$0.002 per quiz
-- GPT-4: ~$0.006 per quiz
-
-**With Anthropic:**
-- Claude 3 Sonnet: ~$0.004 per quiz
-
-**Monthly estimates:**
-- 100 quizzes: $0.20-0.60
-- 500 quizzes: $1-3
-- 1000 quizzes: $2-6
-
-Very affordable for educational purposes!
-
-## 🚢 Deployment
-
-### Deploy to Render (Free)
-```bash
-# Push to GitHub
-git push origin main
-
-# Connect to Render
-# Add environment variables
-# Deploy!
-```
-
-### Deploy to Railway
-```bash
-# Install Railway CLI
-npm i -g @railway/cli
-
-# Login and deploy
-railway login
-railway init
-railway up
-```
-
-### Deploy to Heroku
-```bash
-heroku create your-quiz-app
-heroku config:set OPENAI_API_KEY=your-key
-git push heroku main
-```
-
-## 🧪 Testing
-
-Test the application:
-1. Load sample content
-2. Generate quiz
-3. Verify questions are relevant
-4. Take quiz and submit
-5. Check results accuracy
-
-## 📝 API Endpoints
-
-### `POST /api/generate-quiz`
-Generate a new quiz from content
-
-**Request:**
-```json
-{
-  "content": "Educational content here...",
-  "options": {
-    "numQuestions": 8,
-    "difficulty": "intermediate",
-    "subject": "history",
-    "gradeLevel": "middle"
-  }
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "quiz": [...questions...],
-  "metadata": {
-    "generatedAt": "2025-01-10T12:00:00Z",
-    "numQuestions": 8
-  }
-}
-```
-
-### `GET /api/health`
-Check server and AI status
-
-## 🤝 Contributing
-
-Contributions are welcome! Feel free to:
-- Report bugs
-- Suggest features
-- Submit pull requests
-- Improve documentation
-
-## 📄 License
-
-MIT License - Free to use and modify for any purpose.
-
-## 🙏 Acknowledgments
-
-- OpenAI for GPT API
-- Anthropic for Claude API
-- Express.js team
-- The open-source community
-
-## 📞 Support
-
-- Check [QUICKSTART.md](QUICKSTART.md) for quick setup
-- See [COMPLETE-SETUP-GUIDE.md](COMPLETE-SETUP-GUIDE.md) for details
-- Open an issue for bugs
-- Star the project if you find it useful!
-
-## 🎉 Get Started Now!
-
-```bash
-npm install
-npm start
-# Open http://localhost:3000
-# Start generating quizzes!
-```
-
-**Made with ❤️ for educators and learners everywhere**
+**Made for a smarter way to learn.** 
