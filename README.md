@@ -54,7 +54,7 @@ Creating diverse, accurate, and engaging quizzes manually is time-consuming and 
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/quiz-whiz.git
+git clone https://github.com/FVTVLIX/quiz-whiz.git
 cd quiz-whiz
 
 # 2. Install dependencies
